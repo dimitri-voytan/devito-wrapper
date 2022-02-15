@@ -1,7 +1,7 @@
 # Devito Wrapper
 Wrapper for Devito to ease computation of elastic, acoustic, and viscoelastic wave fields. Organize experiments in config files and save state for future reference.
 
-Currently only 2D elastic computation is supported and most features are not fully developed nor tested.
+Currently only 2D elastic computation is supported and most features are neither fully developed nor tested.
 
 # Installation
 
