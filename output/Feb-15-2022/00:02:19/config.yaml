@@ -1,0 +1,39 @@
+acquisition:
+  rec_x:
+  - 0
+  - 500
+  - 1
+  rec_z: 80
+  src_x: 800
+  src_z: 40
+distributed:
+  n_workers: 10
+  use_mpi: false
+model:
+  bcs: damp
+  fs: false
+  nbl: 30
+  rho_path: ./data/rho.npy
+  shape:
+  - 500
+  - 174
+  spacing:
+  - 20.0
+  - 20.0
+  vp_path: ./data/vp.npy
+  vs_path: ./data/vs.npy
+output:
+  autotune: 'off'
+  file_prefix: shot
+  outdir: ./output/
+solver:
+  autotune: false
+  cfl: None
+  dtype: float32
+  kernel: centered
+  resample_dt: 0.002
+  space_order: 4
+  time_order: 2
+  tn: 6.0
+source:
+  f0: 8

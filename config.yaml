@@ -1,7 +1,7 @@
 model:
-  vp_path: '/disk/student/dvoytan/Devito/HESS_VTI/numpy/'
-  vs_path: '/disk/student/dvoytan/Devito/HESS_VTI/numpy/'
-  rho_path: '/disk/student/dvoytan/Devito/HESS_VTI/numpy/'
+  vp_path: './data/vp.npy' #(m/s)
+  vs_path: './data/vs.npy' #(m/s)
+  rho_path: './data/rho.npy' #(kg/m^3)
   spacing: [20.0, 20.0] #dx, dz (m)
   shape: [500, 174] #nx, nz. if None, inferred from vp
   #Boundary Conditions
@@ -12,7 +12,7 @@ solver:
   #Time axis. 
   tn: 6.0 #units of seconds
   cfl: None #If provided overrides the devito Courant–Friedrichs–Lewy condition value.
-  resample_dt: 0.002 #resamples synthetics to the provided dt
+  resample_dt: 0.002 #resamples synthetics to the provided dt (s)
   #Kernel
   kernel: 'centered'
   space_order: 4
@@ -25,10 +25,10 @@ source:
 acquisition:
   src_x: 800 #m
   src_z: 40 #m
-  rcv_x: [0, 500, 1] #start, stop stride in index
-  rcv_z: 80 #m
+  rec_x: [0, 500, 1] #start, stop stride in index
+  rec_z: 80 #m
 output:
-  outdir: './OUTPUT/'
+  outdir: './output/'
   file_prefix: 'shot'
   autotune: 'off'
   # save_rec_locs: true #Each gather will save a key 'rec' saving the absolute rec locations
