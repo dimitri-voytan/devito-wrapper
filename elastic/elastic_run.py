@@ -22,13 +22,6 @@ def initialize_output(save_path):
     os.makedirs(outdir)
     return outdir
 
-def parse_config_to_kwargs(config):
-    kwargs = {}
-    for item in config.keys():
-        for val in config[item]:
-            kwargs[val] = config[item][val]
-    return kwargs
-
 def resample_gather(config, geometry, data):
     new_dt = config['solver']['resample_dt']
     t_final = config['solver']['tn']
@@ -51,43 +44,78 @@ def resample_gather(config, geometry, data):
 def get_bottom_padding(vp, config):
     model_config = config['model']
     dx = model_config['spacing'][0]
-    dz = model_config['spacing'][1]
-    index = int(config['acquisition']['src_x']/dx)
-    slc = vp[index, :]
+    dz = model_config['spacing'][1] #vp is in km/s so need to convert
+    src_x = int(config['acquisition']['src_x']/dx)
+    src_z = int(config['acquisition']['src_z']/dz)
+
+    #Take a depth slice
+    slc = vp[src_x, src_z:]
 
     #Get the two-way traveltime for a vertical ray
-    t = 2*np.sum(slc*(dz/1000)) #seconds
+    t = 2*np.sum(slc*(dz)) #seconds
     tn = config['solver']['tn']
 
     if t <= tn:
-        bottom_pad = (1./2.)*(tn-t)*slc[-1]/(dx/1000)
+        #dz is converted form from m to km
+        bottom_pad = (1./2.)*(tn-t)*slc[-1]/(dz/1000)
         bottom_pad = int(np.round(bottom_pad)) + 1
     else:
         bottom_pad = 0
     return bottom_pad
-    
+
+def get_side_padding(vp, config):
+    '''
+    Designed to remove the direct wave reflection propogating at 
+    the surface (typically water) velocity, but may not remove edge 
+    reflections e.g. if there is a fast medium in the shallow subsurface 
+    such as a large salt block.
+    '''
+    model_config = config['model']
+    dx = model_config['spacing'][0] #vp is in km/s so need to convert
+    dz = model_config['spacing'][1]
+    src_z = int(config['acquisition']['src_z']/dz)
+    src_x = int(config['acquisition']['src_x']/dx)
+
+    slc_right = vp[src_x:, src_z]
+    slc_left = vp[:src_x, src_z]
+    tn = config['solver']['tn']
+
+    #Get the right and left side traveltime
+    right_tt = np.sum(slc_right*(dx/1000))
+    left_tt = np.sum(slc_left*(dx/1000))
+
+    #Get padding amounts
+    if right_tt <= tn:
+        pad_right = (1./2.)*(tn-right_tt)*slc_right[-1]/(dx/1000)
+        pad_right = int(np.round(pad_right)) + 1
+    else:
+        pad_right = 0
+
+    if left_tt <= tn:
+        pad_left = (1./2.)*(tn-left_tt)*slc_left[-1]/(dx/1000)
+        pad_left = int(np.round(pad_left)) + 1
+    else:
+        pad_left = 0
+
+    return pad_left, pad_right
+
 def pad_based_on_source(vp, config):
-    '''Pad either the left or right side of the model so that the source is centered'''
+    '''Pad the model to avoid edge reflections'''
 
     src_x = config['acquisition']['src_x']
     dx = config['model']['spacing'][0]
     pad_dict = {}
-    pad_dict['bottom'] = get_bottom_padding(vp, config)
-    pad_dict['top'] = 0
     model_width = dx*config['model']['shape'][0]
     half_model_width = model_width/2
-    if src_x > half_model_width: #half the model width
-        pad_dist = int((src_x - half_model_width)/dx)
-        pad_dict['right'] = pad_dist
-        pad_dict['left'] = 0
-    else:
-        pad_dist = int((half_model_width-src_x)/dx)
-        pad_dict['left'] = pad_dist
-        pad_dict['right'] = 0
+
+    pad_dict['bottom'] = get_bottom_padding(vp, config)
+    pad_dict['top'] = 0
+    pad_dict['left'], pad_dict['right'] = get_side_padding(vp, config) 
+
     return pad_dict
 
 
-def setup_model(config, **kwargs):
+def setup_model(config):
 
     model_config = config['model']
 
@@ -110,6 +138,7 @@ def setup_model(config, **kwargs):
     padding = pad_based_on_source(vp, config)
 
     params = [vp, vs, rho]
+   
     #Pad the params
     for i, param in enumerate(params):
         params[i] = np.pad(params[i], pad_width=((padding['left'],padding['right']),\
@@ -122,17 +151,20 @@ def setup_model(config, **kwargs):
     else:
         x_origin = 0
 
-    origin = tuple([x_origin, 0.])
+    origin = tuple([x_origin, 0.0])
+
+    #Correct shape
+    shape = vp.shape
     
     return SeismicModel(space_order=space_order, vp=vp, vs=vs, b=1/rho,
                             origin=origin, shape=shape, dtype=dtype, spacing=spacing,
-                            nbl=nbl, **kwargs)
+                            nbl=nbl)
 
 def setup_geometry(model, config):
 
     acq_config = config['acquisition']
-    tn = config['solver']['tn']*1000
-    f0 = config['source']['f0']/1000
+    tn = config['solver']['tn']*1000 #to ms
+    f0 = config['source']['f0']/1000 #to kHz
     src_type = 'Ricker'
     src_coord = (acq_config['src_x'], acq_config['src_z'])
     rcv_coords = (acq_config['rec_x'], acq_config['rec_z'])
@@ -152,11 +184,13 @@ def setup_src_coords(model, src_coord):
 
 def setup_rec_coords(model, rcv_coords):
     recx = rcv_coords[0]
+    recz = rcv_coords[-1]
+
     recx = np.arange(recx[0], recx[1], recx[2])*model.spacing[0]
 
     rec_coordinates = np.empty((len(recx), model.dim))
     rec_coordinates[:, 0] = recx
-    rec_coordinates[:, -1] = rcv_coords[-1]
+    rec_coordinates[:, -1] = recz
     return rec_coordinates
 
 def elastic_setup(config):
@@ -179,7 +213,7 @@ def run(config):
     solver, critical_dt, geometry = elastic_setup(config)
     info("Applying Forward")
 
-    rec1, rec2, v, tau, summary = solver.forward(autotune=config['solver']['autotune'])
+    rec1, rec2, v, tau, summary = solver.forward(autotune=config['solver']['autotune'])                                       
 
     return rec1, rec2, v, tau, summary, geometry
 
@@ -202,11 +236,13 @@ if __name__ == '__main__':
 
     #Run the solver
     rec1, rec2, v, tau, summary, geometry = run(config)
+    rec1 = rec1.data
+    rec2 = rec2.data
 
     #Resample gather to requested dt
-    if config['solver']['resample_dt'] is not None:
-        rec1 = resample_gather(config, geometry, rec1.data)
-        rec2 = resample_gather(config, geometry, rec2.data)
+    # if config['solver']['resample_dt'] is not None:
+    #     rec1 = resample_gather(config, geometry, rec1)
+    #     rec2 = resample_gather(config, geometry, rec2)
 
     #save
     save_file = {'v_1':rec1,
