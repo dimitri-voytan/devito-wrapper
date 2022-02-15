@@ -29,7 +29,7 @@ def resample_gather(config, geometry, data):
 
     #For aco, we resample to the tti sampling rate
     new_nt = int(t_final/new_dt)
-    new_time_axis = np.linspace(0, t_final, new_nt)
+    new_time_axis = np.linspace(0, t_final, new_nt)*1000 #convert to ms
 
     #allocate a new array for the resampled gather
     resample_data = np.zeros((new_nt, data.shape[-1]))
@@ -240,9 +240,9 @@ if __name__ == '__main__':
     rec2 = rec2.data
 
     #Resample gather to requested dt
-    # if config['solver']['resample_dt'] is not None:
-    #     rec1 = resample_gather(config, geometry, rec1)
-    #     rec2 = resample_gather(config, geometry, rec2)
+    if config['solver']['resample_dt'] is not None:
+        rec1 = resample_gather(config, geometry, rec1)
+        rec2 = resample_gather(config, geometry, rec2)
 
     #save
     save_file = {'v_1':rec1,

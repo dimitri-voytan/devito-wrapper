@@ -1,2 +1,7 @@
-./notebooks/*
-./output
+**/notebooks
+**/output
+
+#notebooks
+.ipynb
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
