@@ -3,7 +3,7 @@ Wrapper for Devito to ease computation of elastic, acoustic, and acoustic anisot
 
 Currently only 2D elastic computation is supported and most features are neither fully developed nor tested.
 
-The solvers are based on the [devito seismic examples](https://github.com/devitocodes/devito/tree/master/examples/seismic) with improvements (soon) to ease the development of wave propogation experiments in realistic media. 
+The solvers are based on the [devito seismic examples](https://github.com/devitocodes/devito/tree/master/examples/seismic) with improvements (soon) to ease the development of wave propagation experiments in realistic media. 
 
 # Installation :gear:
 
