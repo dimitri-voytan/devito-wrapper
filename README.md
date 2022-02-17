@@ -29,7 +29,7 @@ To run with a different velocity model, acquisition geometry, source frequency, 
 
 # Technical Notes
 
-The damping absorbing boundaries provided in the devito examples are unsatisfactory for many applications. I am working on rewriting the devito examples with PML absorbing boundaries. In the meantime, the velocity model is padded based on the two way travel time of straight rays from the source location to the model boundary so that the numeric reflections are largely removed. This is reasonably affordable in 2D. Noe that the padding is not robust if e.g. there are high velocity regions in the shallow subsurface, so use a few damping layers as well. 
+The damping absorbing boundaries provided in the devito examples are unsatisfactory for many applications. I am working on rewriting the devito examples with PML absorbing boundaries. In the meantime, the velocity model is padded based on the two way travel time of straight rays from the source location to the model boundary so that the numeric reflections are largely removed. This is reasonably affordable in 2D. Note that the padding is not robust if e.g. there are high velocity regions in the shallow subsurface, so use a few damping layers as well. 
 
 Currently the solver is limited to 2nd order in time. I will try to include higher order time discretizations, improved spatial stencils, etc. as time permits. 
 
