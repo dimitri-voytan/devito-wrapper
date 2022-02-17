@@ -1,7 +1,7 @@
 model:
-  vp_path: './data/vp.npy' #(m/s)
-  vs_path: './data/vs.npy' #(m/s)
-  rho_path: './data/rho.npy' #(kg/m^3)
+  vp_path: './data/marmousi_vp.npy' #(m/s)
+  vs_path: './data/marmousi_vs.npy' #(m/s)
+  rho_path: './data/marmousi_rho.npy' #(kg/m^3)
   spacing: [20.0, 20.0] #dx, dz (m)
   shape: [500, 174] #nx, nz. if None, inferred from vp
   #Boundary Conditions
@@ -11,12 +11,12 @@ model:
 solver:
   #Time axis. 
   tn: 6.0 #units of seconds
-  cfl: None #If provided overrides the devito Courant–Friedrichs–Lewy condition value.
+  cfl: None #If provided overrides the devito Courant–Friedrichs–Lewy condition value. NOT IMPLEMENTED YET
   resample_dt: 0.002 #resamples synthetics to the provided dt (s)
   #Kernel
   kernel: 'centered'
   space_order: 4
-  time_order: 2
+  time_order: 2 #NOT IMPLEMENTED YET
   dtype: 'float32'
   autotune: 'off'
 source:
@@ -30,9 +30,9 @@ acquisition:
 output:
   outdir: './output/'
   file_prefix: 'shot'
-  output_type: 'pressure' #gives 1/2(t_xx+t_zz)
+  output_type: 'pressure' #gives 1/2(t_xx+t_zz) NOT IMPLEMENTED YET
 distributed:
-  use_mpi: false #Domain decomposition of the solver and serial over shots. Good for 
-  n_workers: 10
+  use_mpi: false #Domain decomposition of the solver and serial over shots. NOT YET IMPLEMENTED
+  n_workers: 10 #NOT YET IMPLEMENTED
 notes:
   run_notes: 'Testing output for correctness'
