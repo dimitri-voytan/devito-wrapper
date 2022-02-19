@@ -36,5 +36,6 @@ Currently the solver is limited to 2nd order in time. I will try to include high
 # Coming Soon
 
 1. Parallelization via domain decomposition and over source location
-2. PML absorbing boundary conditions
-3. GPU support
+2. Complete acoustic and tti cases
+3. PML absorbing boundary conditions
+4. GPU support
