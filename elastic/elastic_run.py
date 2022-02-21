@@ -22,7 +22,7 @@ def initialize_output(save_path):
     os.makedirs(outdir)
     return outdir
 
-def resample_gather(config, geometry, data):
+def resample_gather(config, geometry, data, order=3):
     new_dt = config['solver']['resample_dt']
     t_final = config['solver']['tn']
     assert type(new_dt) == float
@@ -35,9 +35,8 @@ def resample_gather(config, geometry, data):
     resample_data = np.zeros((new_nt, data.shape[-1]))
 
     for i in range(data.shape[-1]):
-        interp = interp1d(geometry.time_axis.time_values, data[:,i])
-        tmp = interp(new_time_axis)
-        resample_data[:,i] = tmp
+        tck = interpolate.splrep(t, gather[:, i], k=order)
+        resampled_data[:, i] = interpolate.splev(new_time_axis, tck)
 
     return resample_data
 
