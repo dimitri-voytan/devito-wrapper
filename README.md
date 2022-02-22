@@ -25,7 +25,13 @@ python3 elastic_run.py
 This will write a shot gather to disk in a numpy object array which contains the source coordinate, reciever coordinates,
 <img src="https://render.githubusercontent.com/render/math?math=\nabla \cdot \mathbf{v}"> (rec1), and <img src="https://render.githubusercontent.com/render/math?math=\tau_{zz}"> (rec2). 
 
-To run with a different velocity model, acquisition geometry, source frequency, etc. edit the config file `config.yaml`. Some of the parameters in the config file are not yet implemented; these are noted as such. 
+To run with a different velocity model, acquisition geometry, source frequency, etc. edit the config file `config.yaml` accordingly.
+Some of the parameters in the config file are not yet implemented; these are noted as such. 
+
+Some guidelines for running:
+
+1) The velocity model and other physical parameterss should be stored in numpy arrays with shape `(nx, nz)`
+2) The `nav.pkl` controls the source and reciever positions. Check the script `prepare_geometry.py` to see how to prepare this file.
 
 # Technical Notes
 
