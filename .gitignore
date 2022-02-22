@@ -1,6 +1,8 @@
 **/notebooks
 **/output
 
+__pycache__
+
 #notebooks
 .ipynb
 .ipynb_checkpoints
