@@ -1,7 +1,9 @@
 **/notebooks
 **/output
 
+/dask-worker-space
 __pycache__
+*.pkl
 
 #notebooks
 .ipynb

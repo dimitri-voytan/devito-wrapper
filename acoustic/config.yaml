@@ -1,7 +1,5 @@
 model:
   vp_path: '../data/marmousi_vp.npy' #(m/s)
-  vs_path: '../data/marmousi_vs.npy' #(m/s)
-  rho_path: '../data/marmousi_rho.npy' #(kg/m^3)
   spacing: [20.0, 20.0] #dx, dz (m)
   shape: [500, 174] #nx, nz. if None, inferred from vp
   #Boundary Conditions
@@ -27,7 +25,6 @@ acquisition:
 output:
   outdir: './output/'
   file_prefix: 'shot_'
-  output_type: 'pressure' #gives 1/2(t_xx+t_zz) NOT IMPLEMENTED YET
 distributed:
   use_dask: true
   use_mpi: false #Domain decomposition of the solver and serial over shots. NOT YET IMPLEMENTED
