@@ -4,6 +4,7 @@ from argparse import Action, ArgumentError, ArgumentParser
 from devito import error, configuration, warning
 from devito.tools import Pickable
 
+from scipy import interpolate
 from .source import *
 
 __all__ = ['AcquisitionGeometry', 'setup_geometry', 'seismic_args']
@@ -46,6 +47,25 @@ def setup_rec_coords(model):
         rec_coordinates[:, -1] = model.origin[-1] + 2 * model.spacing[-1]
         return rec_coordinates
 
+
+def resample_gather(config, geometry, data, order=3):
+    new_dt = config['solver']['resample_dt']
+    t_final = config['solver']['tn']
+    assert type(new_dt) == float
+
+    # Create the new time axis
+    new_nt = int(t_final/new_dt)
+    new_time_axis = np.linspace(0, t_final, new_nt)*1000  # convert to ms
+
+    # Allocate a new array for the resampled gather
+    resample_data = np.zeros((new_nt, data.shape[-1]))
+
+    for i in range(data.shape[-1]):
+        tck = interpolate.splrep(geometry.time_axis.time_values, data[:, i],
+                                 k=order)
+        resample_data[:, i] = interpolate.splev(new_time_axis, tck)
+
+    return resample_data
 
 class AcquisitionGeometry(Pickable):
     """

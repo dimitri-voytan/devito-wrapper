@@ -23,15 +23,13 @@ source:
   #For now only a Ricker wavelet is supported with median frequency f0
   f0: 8 #Hz
 acquisition:
-  src_x: 800 #m
-  src_z: 40 #m
-  rec_x: [0, 501, 1] #start, stop stride in index
-  rec_z: 80 #m
+  nav_file: './geometry/nav.pkl' #see prepare_geometry.py for an example of how to make
 output:
   outdir: './output/'
-  file_prefix: 'shot'
+  file_prefix: 'shot_'
   output_type: 'pressure' #gives 1/2(t_xx+t_zz) NOT IMPLEMENTED YET
 distributed:
+  use_dask: true
   use_mpi: false #Domain decomposition of the solver and serial over shots. NOT YET IMPLEMENTED
   n_workers: 10 #NOT YET IMPLEMENTED
 notes:
