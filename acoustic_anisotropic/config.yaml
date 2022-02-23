@@ -1,0 +1,36 @@
+model:
+  vp_path: '../data/marmousi_vp.npy' #(m/s)
+  epsilon_path: None
+  delta_path: None
+  theta_path: None
+  spacing: [20.0, 20.0] #dx, dz (m)
+  shape: [500, 174] #nx, nz. if None, inferred from vp
+  #Boundary Conditions
+  nbl: 30
+  bcs: 'damp' #type of boundary condition
+  fs: false #Free surface boundary condition if true
+solver:
+  #Time axis. 
+  tn: 6.0 #units of seconds
+  cfl: None #If provided overrides the devito Courant–Friedrichs–Lewy condition value. NOT IMPLEMENTED YET
+  resample_dt: 0.002 #resamples synthetics to the provided dt (s)
+  #Kernel
+  kernel: 'centered'
+  space_order: 4
+  time_order: 2 #NOT IMPLEMENTED YET
+  dtype: 'float32'
+  autotune: 'off'
+source:
+  #For now only a Ricker wavelet is supported with median frequency f0
+  f0: 8 #Hz
+acquisition:
+  nav_file: './geometry/nav.pkl' #see prepare_geometry.py for an example of how to make
+output:
+  outdir: './output/'
+  file_prefix: 'shot_'
+distributed:
+  use_dask: true
+  use_mpi: false #Domain decomposition of the solver and serial over shots. NOT YET IMPLEMENTED
+  n_workers: 10
+notes:
+  run_notes: 'Testing output for correctness'
