@@ -41,7 +41,7 @@ Currently the solver is limited to 2nd order in time. I will try to include high
 # Coming Soon
 
 1. Parallelization over source location via dask :white_check_mark:
-2. Complete acoustic :white_check_mark: and acoustic tti cases :x:
+2. Complete acoustic :white_check_mark: and acoustic tti cases :white_check_mark:
 3. Unfinished config features
 4. PML absorbing boundary conditions
 5. Extension to 3D
