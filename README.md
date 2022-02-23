@@ -22,7 +22,7 @@ cd acoustic
 python3 acoustic_run.py
 ```
 
-This will write a 20 shot gathers to disk in numpy object arrays which contains the source coordinate, reciever coordinates, and pressure data. 
+This will write 20 shot gathers to disk in numpy object arrays which contains the source coordinate, reciever coordinates, and pressure data. 
 
 To run with a different velocity model, acquisition geometry, source frequency, etc. edit the config file `config.yaml` accordingly.
 Some of the parameters in the config file are not yet implemented; these are noted as such. 
