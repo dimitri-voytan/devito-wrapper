@@ -30,7 +30,7 @@ Some of the parameters in the config file are not yet implemented; these are not
 Some guidelines for running:
 
 1) The velocity model and other physical parameters should be stored in numpy arrays with shape `(nx, nz)`
-2) The `nav.pkl` controls the source and reciever positions. Check the script `prepare_geometry.py` to see how to prepare this file. Currently, simultaneous source acquisition is not supported.
+2) `nav.pkl` controls the source and reciever positions. Check the script `prepare_geometry.py` to see how to prepare this file. Currently, simultaneous source acquisition is not supported.
 
 # Technical Notes
 
