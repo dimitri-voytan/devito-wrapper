@@ -1,7 +1,7 @@
 # Devito Wrapper
 Wrapper for Devito to ease computation of elastic, acoustic, and acoustic anisotropic wave fields. Organize experiments in config files and save state for future reference.
 
-Currently only 2D isotropic elastic and constant density acoustic computation is supported and most features are neither fully developed nor tested.
+Currently only 2D are solutions are supported. Extension to 3D is coming soon!
 
 The solvers are based on the [devito seismic examples](https://github.com/devitocodes/devito/tree/master/examples/seismic) with improvements (soon) to ease the development of wave propagation experiments in realistic media. 
 
