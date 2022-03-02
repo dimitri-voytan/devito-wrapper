@@ -1,6 +1,5 @@
 '''
 An example of how to prepare the acquisition geometry.
-The output nav.pkl file should have a 
 '''
 import pickle
 import numpy as np
