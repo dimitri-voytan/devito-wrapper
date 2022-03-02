@@ -1,3 +1,4 @@
+from debugpy import configure
 import numpy as np
 # import tqdm
 import os
@@ -8,7 +9,6 @@ from argparse import ArgumentParser
 from distributed import Client, LocalCluster, wait
 
 from devito.logger import info
-from devito import configuration as devito_configs
 from devito_wrapper.utils.pad_utils import pad_based_on_source
 from devito_wrapper.utils.utils import resample_gather
 
@@ -20,6 +20,7 @@ from examples.seismic.model import SeismicModel
 class AcousticWrapper():
     def __init__(self, config):
         self.config = config
+        # self.parse_devito_config()
         self.outdir = self.initialize_output(self.config['output']['outdir'])
         self.dump_config()
         
@@ -32,9 +33,9 @@ class AcousticWrapper():
         os.makedirs(outdir)
         return outdir
 
-    def parse_devito_config(self, config):
-        for key, value in config['devito'].items():
-            devito_configs[key] = value
+    def parse_devito_config(self):
+        for key, value in self.config['devito'].items():
+            configuration[key] = value
 
     def dump_config(self):
         # Save the config
