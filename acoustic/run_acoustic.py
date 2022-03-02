@@ -8,6 +8,7 @@ from argparse import ArgumentParser
 from distributed import Client, LocalCluster, wait
 
 from devito.logger import info
+from devito import configuration as devito_configs
 from devito_wrapper.utils.pad_utils import pad_based_on_source
 from devito_wrapper.utils.utils import resample_gather
 
@@ -31,6 +32,10 @@ class AcousticWrapper():
         os.makedirs(outdir)
         return outdir
 
+    def parse_devito_config(self, config):
+        for key, value in config['devito'].items():
+            devito_configs[key] = value
+
     def dump_config(self):
         # Save the config
         with open(os.path.join(self.outdir, "config.yaml"), "w") as output:
@@ -49,7 +54,7 @@ class AcousticWrapper():
         space_order = self.config['solver']['space_order']
         if self.config['solver']['dtype'] == 'float32':
             dtype = np.float32
-        else: 
+        else:
             dtype = np.float64
 
         # Load data and convert to km/s and kg/km^3
