@@ -26,10 +26,10 @@ output:
   outdir: './output/'
   file_prefix: 'shot_'
 distributed:
-  use_dask: true
+  use_dask: false
   use_mpi: false #Domain decomposition of the solver and serial over shots. NOT YET IMPLEMENTED
   n_workers: 2
 devito: # Devito operator configurations described e.g. github.com/devitocodes/devito/blob/master/examples/performance/
-  language: openmp #'C'
+  language: openmp #'C' NOT IMPLEMETED YET
 notes:
   run_notes: 'Testing output for correctness'

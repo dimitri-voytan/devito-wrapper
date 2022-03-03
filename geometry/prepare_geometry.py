@@ -1,22 +1,27 @@
 '''
 An example of how to prepare the acquisition geometry.
-The output nav.pkl file should have a 
 '''
 import pickle
 import numpy as np
 
-dx = 20.0  # m
-dz = 20.0  # m
+dx = 6.096  # m
+dz = 6.096  # m
 
-#Setup source 
-source_x = np.linspace(0, 500*dx, 20)
-source_z = 20.0
+# Setup source
+source_x = np.linspace(0, 3617*dx, 20)
+source_z = dx*3
 
-recv_x = np.linspace(0, 500*dx, 400)
-recv_z = 40.0
+recv_x = np.linspace(0, 3617*dx, 3617)
+recv_z = dz*3
+
+try:
+    n_sources = max(len(source_x), len(source_x))
+except TypeError:
+    # For a single source float type will has no len()
+    n_sources = max(len([source_x]), len([source_z]))
 
 # setup source coordinates
-sources = np.empty((len(source_x), 2))
+sources = np.empty((n_sources, 2))
 sources[:, 0] = source_x
 sources[:, 1] = source_z
 
