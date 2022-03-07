@@ -2,7 +2,7 @@
 **/output
 
 /dask-worker-space
-__pycache__
+**/__pycache__
 *.pkl
 
 #notebooks
