@@ -1,9 +1,7 @@
-from pyexpat import model
 import numpy as np
 # import tqdm
 import os
 import pickle
-from pytools import delta
 import yaml
 from datetime import datetime, date
 from argparse import ArgumentParser
@@ -29,7 +27,7 @@ class AnisotropicWrapper():
         time = datetime.now()
         outdir = os.path.join(save_path,
                               today.strftime("%b-%d-%Y"),
-                              time.strftime("%H:%M:%S"))
+                              time.strftime("%H-%M-%S"))
         os.makedirs(outdir)
         return outdir
 

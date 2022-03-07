@@ -1,7 +1,7 @@
 # Devito Wrapper
 Wrapper for Devito to ease computation of elastic, acoustic, and acoustic anisotropic wave fields. Organize experiments in config files and save state for future reference.
 
-Currently only 2D isotropic elastic and constant density acoustic computation is supported and most features are neither fully developed nor tested.
+Currently only 2D are solutions are supported. Extension to 3D is coming soon!
 
 The solvers are based on the [devito seismic examples](https://github.com/devitocodes/devito/tree/master/examples/seismic) with improvements (soon) to ease the development of wave propagation experiments in realistic media. 
 
@@ -22,7 +22,7 @@ cd acoustic
 python3 acoustic_run.py
 ```
 
-This will write a 20 shot gathers to disk in numpy object arrays which contains the source coordinate, reciever coordinates, and pressure data. 
+This will write 20 shot gathers to disk in numpy object arrays which contains the source coordinate, reciever coordinates, and pressure data. 
 
 To run with a different velocity model, acquisition geometry, source frequency, etc. edit the config file `config.yaml` accordingly.
 Some of the parameters in the config file are not yet implemented; these are noted as such. 
@@ -30,7 +30,7 @@ Some of the parameters in the config file are not yet implemented; these are not
 Some guidelines for running:
 
 1) The velocity model and other physical parameters should be stored in numpy arrays with shape `(nx, nz)`
-2) The `nav.pkl` controls the source and reciever positions. Check the script `prepare_geometry.py` to see how to prepare this file. Currently, simultaneous source acquisition is not supported.
+2) `nav.pkl` controls the source and reciever positions. Check the script `prepare_geometry.py` to see how to prepare this file. Currently, simultaneous source acquisition is not supported.
 
 # Technical Notes
 
@@ -41,7 +41,7 @@ Currently the solver is limited to 2nd order in time. I will try to include high
 # Coming Soon
 
 1. Parallelization over source location via dask :white_check_mark:
-2. Complete acoustic :white_check_mark: and acoustic tti cases :x:
+2. Complete acoustic :white_check_mark: and acoustic tti cases :white_check_mark:
 3. Unfinished config features
 4. PML absorbing boundary conditions
 5. Extension to 3D
